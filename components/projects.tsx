@@ -1,101 +1,80 @@
-"use client"
+// components/projects.tsx
+"use client";
 
-import { useState } from "react"
-import { Github, ExternalLink } from "lucide-react"
+import { useState } from "react";
+import { Github, ExternalLink } from "lucide-react";
+
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  description: string;
+  tech: string[];
+  impact: string;
+  links: {
+    github?: string;
+    demo?: string;
+    website?: string;
+  };
+  image?: string;
+}
+
+const projects: Project[] = [
+  {
+    id: 1,
+    title: "PeerDeck",
+    category: "web",
+    description:
+      "A platform connecting students with real-world projects, courses, and opportunities. Features leaderboards, AI content filtering, and global collaboration.",
+    tech: ["React", "Node.js", "MERN", "AI"],
+    impact: "420+ upvotes, 37% weekly growth, 650+ projects posted",
+    links: {
+      website: "https://peerdeck.com",
+      github: "https://github.com/AV-016/peerdeck",
+    },
+    image: "/projects/peerdeck.png",
+  },
+  {
+    id: 2,
+    title: "Nyayavaani",
+    category: "ai",
+    description:
+      "Legal assistance chatbot simplifying legal communication through natural language processing. Visit nyayavaani.in.net to explore.",
+    tech: ["NLP", "Python", "FastAPI", "Transformers"],
+    impact: "Making legal assistance accessible to all",
+    links: {
+      github: "https://github.com/Aryan-sriii/bhashini",
+      website: "https://nyayavaani.in.net",
+    },
+    image: "/projects/nyayavaani.png",
+  },
+];
+
+const categories = ["all", "web", "ai"] as const;
 
 export default function Projects() {
-  const [filter, setFilter] = useState("all")
-
-  const projects = [
-    {
-      id: 1,
-      title: "Soil Health Analyzer",
-      category: "iot",
-      description:
-        "IoT-based system for monitoring soil pH, moisture, and temperature using ESP32, aimed at improving agricultural productivity.",
-      tech: ["ESP32", "IoT", "Sensors", "Python"],
-      impact: "Real-time soil monitoring for sustainable farming",
-      links: {
-        github: "https://github.com/AV-016/SoilHealthAnalyzer",
-        demo: "https://example.com",
-      },
-    },
-    {
-      id: 2,
-      title: "Nyayavaani",
-      category: "ai",
-      description:
-        "Legal assistance chatbot simplifying legal communication through natural language processing. Visit nyayavaani.in.net to explore.",
-      tech: ["NLP", "Python", "FastAPI", "Transformers"],
-      impact: "Making legal assistance accessible to all",
-      links: {
-        github: "https://github.com/Aryan-sriii/bhashini",
-        website: "https://nyayavaani.in.net",
-      },
-    },
-    {
-      id: 3,
-      title: "Satyavaani",
-      category: "ai",
-      description:
-        "AI-powered smart assistant service for colleges and schools, helping students with academic queries and information.",
-      tech: ["AI", "Python", "NLP", "Web"],
-      impact: "Supporting 1000+ students with academic assistance",
-      links: {
-        github: "https://github.com",
-        demo: "https://example.com",
-      },
-    },
-    {
-      id: 4,
-      title: "Network Data Simulator",
-      category: "research",
-      description: "Simulation tool for testing network performance and efficient data division across nodes.",
-      tech: ["Python", "Networking", "Simulation"],
-      impact: "Optimized network performance analysis",
-      links: {
-        github: "https://github.com/AV-016/dynamic_spectrum_allocation",
-      },
-    },
-    {
-      id: 5,
-      title: "UniPay",
-      category: "blockchain",
-      description: "DApp enabling conversion between fiat currency and NFTs for secure cross-border transactions.",
-      tech: ["Blockchain", "Web3", "Smart Contracts", "NFTs"],
-      impact: "Secure decentralized transaction system",
-      links: {
-        github: "https://github.com",
-        demo: "https://example.com",
-      },
-    },
-  ]
-
-  const categories = ["all", "iot", "ai", "research", "blockchain"]
-  const filtered = filter === "all" ? projects : projects.filter((p) => p.category === filter)
+  const [filter, setFilter] = useState("all");
+  const filtered = filter === "all" ? projects : projects.filter((p) => p.category === filter);
 
   return (
-    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-background relative overflow-hidden">
-      <div className="absolute bottom-20 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-16 ink-animation">
+    <section id="projects" className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-16">
           <h2 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
-            <span className="quill-underline">Tech Projects</span>
+            Tech Projects
           </h2>
           <p className="text-lg text-muted-foreground italic">Building solutions that matter</p>
         </div>
 
-        {/* Filter Buttons */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all duration-300 capitalize ${
+              className={`px-4 py-2 rounded-lg font-semibold capitalize transition-all ${
                 filter === cat
-                  ? "bg-primary text-primary-foreground neon-glow"
-                  : "bg-muted/50 text-foreground hover:bg-muted/80 vintage-border"
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "bg-muted/50 text-foreground hover:bg-muted/80 border border-border"
               }`}
             >
               {cat}
@@ -103,60 +82,56 @@ export default function Projects() {
           ))}
         </div>
 
-        {/* Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((project) => (
             <div
               key={project.id}
-              className="parchment-card p-6 hover:border-primary transition-all duration-300 group tech-accent hover:shadow-xl"
+              className="group bg-card/50 backdrop-blur-sm rounded-xl border border-border/50 p-6 hover:border-primary transition-all hover:shadow-xl hover:-translate-y-1"
             >
-              <div className="h-40 rounded-lg bg-gradient-to-br from-primary/10 to-secondary/10 mb-4 flex items-center justify-center border border-border/30">
-                <div className="text-center">
-                  <p className="text-muted-foreground text-sm font-serif">Project Preview</p>
-                </div>
+              <div className="relative h-48 rounded-lg overflow-hidden mb-4 border border-border/30">
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10">
+                    <p className="text-sm text-muted-foreground font-serif">Preview</p>
+                  </div>
+                )}
               </div>
 
-              <h3 className="font-serif text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+              <h3 className="font-serif text-xl font-bold mb-2 group-hover:text-primary transition-colors">
                 {project.title}
               </h3>
-
-              <p className="text-muted-foreground text-sm mb-3 leading-relaxed">{project.description}</p>
-
+              <p className="text-sm text-muted-foreground mb-3 line-clamp-3">
+                {project.description}
+              </p>
               <div className="mb-4">
-                <p className="text-sm font-semibold text-secondary mb-2">Impact</p>
+                <p className="text-xs font-semibold text-secondary uppercase tracking-wider">Impact</p>
                 <p className="text-sm text-muted-foreground">{project.impact}</p>
               </div>
-
               <div className="flex flex-wrap gap-2 mb-4">
-                {project.tech.map((tech) => (
+                {project.tech.map((t) => (
                   <span
-                    key={tech}
+                    key={t}
                     className="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full font-semibold border border-primary/20"
                   >
-                    {tech}
+                    {t}
                   </span>
                 ))}
               </div>
-
-              <div className="flex gap-3">
-                <a
-                  href={project.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-muted/50 hover:bg-muted rounded-lg transition-colors text-sm font-semibold vintage-border"
-                >
-                  <Github size={16} />
-                  GitHub
-                </a>
-                {project.links.demo && (
+              <div className="flex gap-2">
+                {project.links.github && (
                   <a
-                    href={project.links.demo}
+                    href={project.links.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg transition-colors text-sm font-semibold neon-glow"
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-muted/50 hover:bg-muted rounded-lg text-sm font-semibold border border-border"
                   >
-                    <ExternalLink size={16} />
-                    Demo
+                    <Github size={16} /> Code
                   </a>
                 )}
                 {project.links.website && (
@@ -164,10 +139,9 @@ export default function Projects() {
                     href={project.links.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-lg transition-colors text-sm font-semibold"
+                    className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-secondary text-secondary-foreground rounded-lg text-sm font-semibold"
                   >
-                    <ExternalLink size={16} />
-                    Website
+                    <ExternalLink size={16} /> Live
                   </a>
                 )}
               </div>
@@ -176,5 +150,5 @@ export default function Projects() {
         </div>
       </div>
     </section>
-  )
+  );
 }
